@@ -6,7 +6,7 @@ Made by captivater.
 
 ## File Structure
 
-CapStoreServer --> ServerStorage
+CapStoreServer --> ServerStorage\
 CapStoreClient --> StarterPlayerSripts
 
 ## Usage
@@ -16,9 +16,9 @@ CapStoreClient --> StarterPlayerSripts
 3. Initialize the Client-side of CapStore using CapStoreClient.Initialize()
 
 ## Important note
-! If you modify Profile or Replica directly, it will not Replicate to client !
-! To replicate the data, you should use built-in Replica mutators such as Replica:SetValue() !
-! To get player's data, you can use built-in Replica listeners such as Replica:ListenToChange() !
+! If you modify Profile or Replica directly, it will not Replicate to client !\
+! To replicate the data, you should use built-in Replica mutators such as Replica:SetValue() !\
+! To get player's data, you can use built-in Replica listeners such as Replica:ListenToChange() !\
 ! If you wanna get the profile directly, create your own modules or events to handle that !
 
 Every mutator and listener is arleady documented at the ReplicaService API
