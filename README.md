@@ -32,7 +32,7 @@ Every mutator and listener is arleady documented at the ReplicaService API
 
   CapStoreServer.Initialize(profile_template, store_name, replica_name) --> nil
 
-    -- Initializes the CapStore on the Server-side.
+    Initializes the CapStore on the Server-side.
 
     profile_template   [table] -- Profiles will default to given table (hard-copy) when no data was saved previously
     store_name   nil or [string] -- DataStore name, by default set to "PlayerProfiles"
@@ -40,8 +40,8 @@ Every mutator and listener is arleady documented at the ReplicaService API
 
   CapStoreServer.GetReplica(player) --> [any]
 
-    -- Gets Replica of provided player
-    -- You can modify the data using built-in mutators of ReplicaService
+    Gets Replica of provided player
+    You can modify the data using built-in mutators of ReplicaService
 
     player   [Player] -- Player to change data in
     OR
@@ -49,7 +49,7 @@ Every mutator and listener is arleady documented at the ReplicaService API
 
   CapStoreServer.GetProfile(player) --> [any]
 
-    -- Gets Profile of provided player
+    Gets Profile of provided player
 
     player   [Player] -- Player to change data in
     OR
@@ -65,14 +65,14 @@ Every mutator and listener is arleady documented at the ReplicaService API
 
   CapStoreServer.Initialize(replica_name) --> nil
 
-    -- Initializes the CapStore on the Client-side.
+    Initializes the CapStore on the Client-side.
 
     replica_name   nil or [string] -- Replicas name, by default set to "ProfilesReplica"
 
   CapStoreServer.GetReplica() --> [any]
 
-    -- Gets Replica of client
-    -- You can listen for the data changes using built-in listeners of Replica
+    Gets Replica of client
+    You can listen for the data changes using built-in listeners of Replica
 
     player   [Player] -- Player to change data in
     OR
