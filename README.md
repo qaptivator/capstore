@@ -6,7 +6,7 @@ Made by captivater.
 
 ## File Structure
 
-CapStoreServer --> ServerStorage\
+CapStoreServer --> ServerStorage
 CapStoreClient --> StarterPlayerSripts
 
 ## Usage
@@ -16,69 +16,76 @@ CapStoreClient --> StarterPlayerSripts
 3. Initialize the Client-side of CapStore using CapStoreClient.Initialize()
 
 ## Important note
-! If you modify Profile or Replica directly, it will not Replicate to client !\
-! To replicate the data, you should use built-in Replica mutators such as Replica:SetValue() !\
-! To get player's data, you can use built-in Replica listeners such as Replica:ListenToChange() !\
-! If you wanna get the profile directly, create your own modules or events to handle that !
+- If you modify Profile or Replica directly, it will not Replicate to client
+- To replicate the data, you should use built-in Replica mutators such as Replica:SetValue()
+- To get player's data, you can use built-in Replica listeners such as Replica:ListenToChange()
+- If you wanna get the profile directly, create your own modules or events to handle that
 
 Every mutator and listener is arleady documented at the ReplicaService API
 (https://madstudioroblox.github.io/ReplicaService/api/)
 
 # API
 
-### Functions [CapStoreServer]:
+## CapStoreServer Functions
 
-CapStoreServer.Initialize(profile_template, store_name, replica_name) --> nil
+### CapStoreServer.Initialize(profile_template, store_name, replica_name) 
+Parameters:
+- profile_template -- Profiles will default to given table (hard-copy) when no data was saved previously
+- store_name -- DataStore name, by default set to "PlayerProfiles"
+- replica_name -- Replicas name, by default set to "ProfilesReplica"
 
 Initializes the CapStore on the Server-side.
+You should call this function before everything you do in CapStore Server-side.
+Returns nothing.
 
-profile_template   [table] -- Profiles will default to given table (hard-copy) when no data was saved previously
-store_name   nil or [string] -- DataStore name, by default set to "PlayerProfiles"
-Replica_name   nil or [string] -- Replicas name, by default set to "ProfilesReplica"
+### CapStoreServer.GetReplica(player) 
+Parameters:
+- player -- Player to get Replica from
 
-CapStoreServer.GetReplica(player) --> [any]
+Gets Replica of provided player.
+You can modify the data using built-in mutators of ReplicaService.
+You can skip the `player` parameter and it will return Replica of every player in the current server.
 
-Gets Replica of provided player
-You can modify the data using built-in mutators of ReplicaService
+### CapStoreServer.GetProfile(player) 
+Parameters:
+- player -- Player to get Replica from
 
-player   [Player] -- Player to change data in
-OR
-player   nil -- Get every Replica in current server
+Gets Profile of provided player.
+It's not recommended to change the data directly in Profile.
+If you do so, it will not replicate to the player.
+You can skip the `player` parameter and it will return Profile of every player in the current server.
 
-CapStoreServer.GetProfile(player) --> [any]
+## CapStoreServer Members
 
-Gets Profile of provided player
+### CapStoreServer.ProfileService
+The ProfileService module what CapStore's Server-side module uses.
 
-player   [Player] -- Player to change data in
-OR
-player   nil -- Get every Profile in current server
+### CapStoreServer.ProfileStore
+The ProfileStore what CapStore's Server-side module uses.
 
-### Members [CapStoreServer]:
+### CapStoreServer.ReplicaService
+The ReplicaService module what CapStore's Server-side module uses.
 
-CapStoreServer.ProfileService   [ProfileService] -- ProfileService module
-CapStoreServer.ProfileStore   [ProfileStore] -- ProfileStore from ProfileService
-CapStoreServer.ReplicaService   [ReplicaService] -- ReplicaService module
+## CapStoreClient Functions
 
-### Functions [CapStoreClient]:
-
-CapStoreServer.Initialize(replica_name) --> nil
+### CapStoreClient.Initialize(replica_name) 
+Parameters:
+- replica_name -- Replicas name, by default set to "ProfilesReplica", it should be the same as `replica_name` you defined at the `CapStoreServer.Initialize()`
 
 Initializes the CapStore on the Client-side.
+You should call this function before everything you do in CapStore Client-side.
+Returns nothing.
 
-replica_name   nil or [string] -- Replicas name, by default set to "ProfilesReplica"
+### CapStoreServer.GetReplica() 
 
-CapStoreServer.GetReplica() --> [any]
+Gets Replica of client.
+You can listen for the data changes using built-in listeners of Replica.
 
-Gets Replica of client
-You can listen for the data changes using built-in listeners of Replica
+## CapStoreClient Members
 
-player   [Player] -- Player to change data in
-OR
-player   nil -- Get every Replica in current server
+### CapStoreServer.ReplicaController
+The ReplicaController module what CapStore's Server-side module uses.
 
-### Members [CapStoreClient]:
-
-CapStoreServer.ReplicaController   [ReplicaController] -- ReplicaController module
-CapStoreServer.ReplicaCreated   [RBXScriptSignal] -- Event what gets fired when Replica got sucesfully created
-
-Thanks for using this library!
+### CapStoreServer.ReplicaCreated
+Event what gets fired when Replica got successfully created.
+It indicates that the Replica became available to use. 
