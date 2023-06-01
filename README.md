@@ -4,12 +4,12 @@ Roblox Library to easily setup simple data storing.
 This library uses ProfileService along with ReplicaService.
 Made by captivater.
 
-# File Structure
+## File Structure
 
   CapStoreServer --> ServerStorage
   CapStoreClient --> StarterPlayerSripts
 
-# Usage
+## Usage
 
   1. Put the modules in needed folders as described in file structure
 
@@ -17,7 +17,7 @@ Made by captivater.
 
   3. Initialize the Client-side of CapStore using CapStoreClient.Initialize()
 
-# Important note
+## Important note
   ! If you modify Profile or Replica directly, it will not Replicate to client !
   ! To replicate the data, you should use built-in Replica mutators such as Replica:SetValue() !
   ! To get player's data, you can use built-in Replica listeners such as Replica:ListenToChange() !
@@ -28,7 +28,7 @@ Every mutator and listener is arleady documented at the ReplicaService API
 
 # API
 
-## Functions [CapStoreServer]:
+### Functions [CapStoreServer]:
 
   CapStoreServer.Initialize(profile_template, store_name, replica_name) --> nil
 
@@ -55,13 +55,13 @@ Every mutator and listener is arleady documented at the ReplicaService API
     OR
     player   nil -- Get every Profile in current server
 
-## Members [CapStoreServer]:
+### Members [CapStoreServer]:
 
   CapStoreServer.ProfileService   [ProfileService] -- ProfileService module
   CapStoreServer.ProfileStore   [ProfileStore] -- ProfileStore from ProfileService
   CapStoreServer.ReplicaService   [ReplicaService] -- ReplicaService module
 
-## Functions [CapStoreClient]:
+### Functions [CapStoreClient]:
 
   CapStoreServer.Initialize(replica_name) --> nil
 
@@ -78,7 +78,7 @@ Every mutator and listener is arleady documented at the ReplicaService API
     OR
     player   nil -- Get every Replica in current server
 
-## Members [CapStoreClient]:
+### Members [CapStoreClient]:
 
   CapStoreServer.ReplicaController   [ReplicaController] -- ReplicaController module
   CapStoreServer.ReplicaCreated   [RBXScriptSignal] -- Event what gets fired when Replica got sucesfully created
