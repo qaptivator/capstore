@@ -8,8 +8,8 @@ Roblox model: https://www.roblox.com/library/13625347510/CapStore
 
 ## File Structure
 
-Put the model named `ServerStorage` into ServerStorage and then ungroup it.
-Put the model named `ReplicatedStorage` into ReplicatedStorage and then ungroup it.
+Put the model named `ServerStorage` into ServerStorage and then ungroup it.\
+Put the model named `ReplicatedStorage` into ReplicatedStorage and then ungroup it.\
 Then you can require the `CapStoreServer` and `CapStoreClient` from there.
 
 ## Usage
