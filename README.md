@@ -6,14 +6,16 @@ Made by captivater.
 
 ## File Structure
 
-CapStoreServer --> ServerStorage
-CapStoreClient --> StarterPlayerSripts
+Put the model named `ServerStorage` into ServerStorage and then ungroup it.
+Put the model named `ReplicatedStorage` into ReplicatedStorage and then ungroup it.
+Then you can require the `CapStoreServer` and `CapStoreClient` from there.
 
 ## Usage
 
-1. Put the modules in needed folders as described in file structure
-2. Initialize the Server-side of CapStore using CapStoreServer.Initialize()
-3. Initialize the Client-side of CapStore using CapStoreClient.Initialize()
+1. Put the models in needed directories as described in file structure
+2. Require the modules
+3. Initialize the Server-side of CapStore using CapStoreServer.Initialize()
+4. Initialize the Client-side of CapStore using CapStoreClient.Initialize()
 
 ## Important note
 - If you modify Profile or Replica directly, it will not Replicate to client
