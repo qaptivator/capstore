@@ -1,6 +1,6 @@
 # CapStore
 
-Roblox Library to easily setup simple data storing.
+Roblox Library to easily setup simple data storing.\
 This library uses ProfileService along with ReplicaService.
 Made by captivater.
 
