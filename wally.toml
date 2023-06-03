@@ -1,5 +1,5 @@
 [package]
-name = "captivater/capstore"
+name = "qaptivator/capstore"
 description = "Roblox Library to easily setup simple data storing"
 version = "0.1.0"
 registry = "https://github.com/UpliftGames/wally-index"
