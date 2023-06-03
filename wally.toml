@@ -1,0 +1,13 @@
+[package]
+name = "captivater/capstore"
+description = "Roblox Library to easily setup simple data storing"
+version = "0.1.0"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+license = "MIT"
+
+[dependencies]
+promise = "evaera/promise@4.0.0"
+signal = "sleitnick/signal@1.5.0"
+replicaservice = "brittonfischer/replicaservice@0.1.0"
+profileservice = "nidoxs/profileservice@1.0.0"

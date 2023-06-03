@@ -1,0 +1,13 @@
+{
+  "name": "capstore",
+  "tree": {
+    "$className": "DataModel",
+    "ReplicatedStorage": {
+      "$className": "ReplicatedStorage",
+      "$path": "Packages",
+      "capstore": {
+        "$path": "src"
+      }
+    }
+  }
+}

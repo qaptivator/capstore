@@ -2,16 +2,18 @@
 	CapStore Server-side module
 --]]
 
-local ProfileService = require(script.ProfileService)
-local ReplicaService = require(script.ReplicaService)
+local ProfileService = require(script.Parent.profileservice)
+local ReplicaService = require(script.Parent.replicaservice)
+local Promise = require(script.Parent.promise)
+local Signal = require(script.Parent.signal)
+
 local Players = game:GetService("Players")
 
-local Profiles = {}
-local ProfileStore = {}
-local Replicas = {}
-local ReplicaClassToken = nil
+local Profiles, ProfileStore, Replicas, ReplicaClassToken
 
 local CapStoreServer = {}
+
+CapStoreServer.Initialized = Signal.new()
 
 local function OnPlayerAdded(player)
 	local profile = ProfileStore:LoadProfileAsync("Player_" .. player.UserId)
@@ -54,7 +56,7 @@ local function OnPlayerRemoved(player)
 	end
 end
 
-function CapStoreServer.Initialize(profile_template: {any}, store_name: string, replica_name: string)
+function CapStoreServer.Initialize(profile_template: { any }, store_name: string, replica_name: string)
 	local store_name = store_name or "PlayerProfiles"
 	local replica_name = replica_name or "ProfilesReplica"
 
@@ -73,30 +75,40 @@ function CapStoreServer.Initialize(profile_template: {any}, store_name: string, 
 			task.spawn(OnPlayerRemoved, player)
 		end
 	end)
+
+	CapStoreServer.Initialized:Fire()
 end
 
 function CapStoreServer.GetReplica(player: Player)
-	assert(Replicas ~= {}, "CapStore hasn't loaded up yet")
-	
-	if player ~= nil then
-		assert(Replicas[player], string.format("Replica does not exist for %s", player.UserId))
+	return Promise.new(function(resolve)
+		if not Replicas then
+			CapStoreServer.Initialized:Wait()
+		end
 
-		return Replicas[player]
-	else
-		return Replicas
-	end
+		if player ~= nil then
+			assert(Replicas[player], string.format("Replica does not exist for %s", player.UserId))
+
+			resolve(Replicas[player])
+		else
+			resolve(Replicas)
+		end
+	end)
 end
 
 function CapStoreServer.GetProfile(player: Player)
-	assert(Profiles ~= {}, "CapStore hasn't loaded up yet")
-	
-	if player ~= nil then
-		assert(Profiles[player], string.format("Profile does not exist for %s", player.UserId))
+	return Promise.new(function(resolve)
+		if Profiles == {} then
+			CapStoreServer.Initialized:Wait()
+		end
 
-		return Profiles[player]
-	else
-		return Profiles
-	end
+		if player ~= nil then
+			assert(Profiles[player], string.format("Profile does not exist for %s", player.UserId))
+
+			resolve(Profiles[player])
+		else
+			resolve(Profiles)
+		end
+	end)
 end
 
 CapStoreServer.ProfileService = ProfileService
