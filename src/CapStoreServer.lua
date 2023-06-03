@@ -60,8 +60,8 @@ local function OnPlayerRemoved(player)
 end
 
 function CapStoreServer.Initialize(profile_template: { any }, store_name: string, replica_name: string)
-	local store_name = store_name or "PlayerProfiles"
-	local replica_name = replica_name or "ProfilesReplica"
+	store_name = store_name or "PlayerProfiles"
+	replica_name = replica_name or "ProfilesReplica"
 
 	ProfileStore = ProfileService.GetProfileStore(store_name, profile_template)
 	ReplicaClassToken = ReplicaService.NewClassToken(replica_name)

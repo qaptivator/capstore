@@ -11,10 +11,10 @@ local CapStoreClient = {}
 CapStoreClient.ReplicaCreated = Signal.new()
 CapStoreClient.ReplicaController = ReplicaController
 
-function CapStoreClient.Initialize(replicaName: string)
-	local replicaName = replicaName or "ProfilesReplica"
+function CapStoreClient.Initialize(replica_name: string)
+	replica_name = replica_name or "ProfilesReplica"
 
-	ReplicaController.ReplicaOfClassCreated(replicaName, function(replica)
+	ReplicaController.ReplicaOfClassCreated(replica_name, function(replica)
 		CapStoreClient.Replica = replica
 		CapStoreClient.ReplicaCreated:Fire(replica)
 	end)
