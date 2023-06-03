@@ -2,9 +2,9 @@
 	CapStore Client-side module
 --]]
 
-local ReplicaController = require(script.Parent.replicaservice)
-local Promise = require(script.Parent.promise)
-local Signal = require(script.Parent.signal)
+local ReplicaController = require(script.Parent.Parent.replicaservice)
+local Promise = require(script.Parent.Parent.promise)
+local Signal = require(script.Parent.Parent.signal)
 
 local CapStoreClient = {}
 

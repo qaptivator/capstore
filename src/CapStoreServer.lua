@@ -2,14 +2,17 @@
 	CapStore Server-side module
 --]]
 
-local ProfileService = require(script.Parent.profileservice)
-local ReplicaService = require(script.Parent.replicaservice)
-local Promise = require(script.Parent.promise)
-local Signal = require(script.Parent.signal)
+local ProfileService = require(script.Parent.Parent.profileservice)
+local ReplicaService = require(script.Parent.Parent.replicaservice)
+local Promise = require(script.Parent.Parent.promise)
+local Signal = require(script.Parent.Parent.signal)
 
 local Players = game:GetService("Players")
 
-local Profiles, ProfileStore, Replicas, ReplicaClassToken
+local Profiles = nil
+local ProfileStore = nil
+local Replicas = nil
+local ReplicaClassToken = nil
 
 local CapStoreServer = {}
 
@@ -86,7 +89,7 @@ function CapStoreServer.GetReplica(player: Player)
 		end
 
 		if player ~= nil then
-			assert(Replicas[player], string.format("Replica does not exist for %s", player.UserId))
+			assert(Replicas[player], string.format("Replica does not exist for %s", tostring(player.UserId)))
 
 			resolve(Replicas[player])
 		else
@@ -102,7 +105,7 @@ function CapStoreServer.GetProfile(player: Player)
 		end
 
 		if player ~= nil then
-			assert(Profiles[player], string.format("Profile does not exist for %s", player.UserId))
+			assert(Profiles[player], string.format("Profile does not exist for %s", tostring(player.UserId)))
 
 			resolve(Profiles[player])
 		else
