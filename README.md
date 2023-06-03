@@ -4,16 +4,21 @@ Roblox Library to easily setup simple data storing.
 This library uses ProfileService along with ReplicaService.
 Made by captivater.
 
+Roblox model: https://www.roblox.com/library/13625347510/CapStore
+
 ## File Structure
 
-CapStoreServer --> ServerStorage
-CapStoreClient --> StarterPlayerSripts
+Put the model named `ServerStorage` into ServerStorage and then ungroup it.
+Put the model named `ReplicatedStorage` into ReplicatedStorage and then ungroup it.
+Then you can require the `CapStoreServer` and `CapStoreClient` from there.
 
 ## Usage
 
-1. Put the modules in needed folders as described in file structure
-2. Initialize the Server-side of CapStore using CapStoreServer.Initialize()
-3. Initialize the Client-side of CapStore using CapStoreClient.Initialize()
+1. Get the Roblox model and insert it into your game
+2. Put the models in needed directories as described in file structure
+3. Require the modules
+4. Initialize the Server-side of CapStore using CapStoreServer.Initialize()
+5. Initialize the Client-side of CapStore using CapStoreClient.Initialize()
 
 ## Important note
 - If you modify Profile or Replica directly, it will not Replicate to client
@@ -30,9 +35,9 @@ Every mutator and listener is arleady documented at the ReplicaService API
 
 ### CapStoreServer.Initialize(profile_template, store_name, replica_name) 
 Parameters:
-- profile_template -- Profiles will default to given table (hard-copy) when no data was saved previously
-- store_name -- DataStore name, by default set to "PlayerProfiles"
-- replica_name -- Replicas name, by default set to "ProfilesReplica"
+- profile_template - Profiles will default to given table (hard-copy) when no data was saved previously
+- store_name - DataStore name, by default set to "PlayerProfiles"
+- replica_name - Replicas name, by default set to "ProfilesReplica"
 
 Initializes the CapStore on the Server-side.
 You should call this function before everything you do in CapStore Server-side.
@@ -40,7 +45,7 @@ Returns nothing.
 
 ### CapStoreServer.GetReplica(player) 
 Parameters:
-- player -- Player to get Replica from
+- player - Player to get Replica from
 
 Gets Replica of provided player.
 You can modify the data using built-in mutators of ReplicaService.
@@ -48,7 +53,7 @@ You can skip the `player` parameter and it will return Replica of every player i
 
 ### CapStoreServer.GetProfile(player) 
 Parameters:
-- player -- Player to get Replica from
+- player - Player to get Replica from
 
 Gets Profile of provided player.
 It's not recommended to change the data directly in Profile.
@@ -70,7 +75,7 @@ The ReplicaService module what CapStore's Server-side module uses.
 
 ### CapStoreClient.Initialize(replica_name) 
 Parameters:
-- replica_name -- Replicas name, by default set to "ProfilesReplica", it should be the same as `replica_name` you defined at the `CapStoreServer.Initialize()`
+- replica_name - Replicas name, by default set to "ProfilesReplica", it should be the same as `replica_name` you defined at the `CapStoreServer.Initialize()`
 
 Initializes the CapStore on the Client-side.
 You should call this function before everything you do in CapStore Client-side.
