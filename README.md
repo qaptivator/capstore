@@ -4,23 +4,24 @@ Roblox Library to easily setup simple data storing.
 This library uses ProfileService along with ReplicaService.
 Made by captivater.
 
-Roblox model: https://www.roblox.com/library/13625347510/CapStore
+## Installation
 
-## File Structure
+For Wally: Paste this into your `wally.toml` file
 
-Put the model named `ServerStorage` into ServerStorage and then ungroup it.
-Put the model named `ReplicatedStorage` into ReplicatedStorage and then ungroup it.
-Then you can require the `CapStoreServer` and `CapStoreClient` from there.
+```json
+capstore = "qaptivator/capstore@0.1.7"
+```
+
+Model is coming soon.
 
 ## Usage
 
-1. Get the Roblox model and insert it into your game
-2. Put the models in needed directories as described in file structure
-3. Require the modules
-4. Initialize the Server-side of CapStore using CapStoreServer.Initialize()
-5. Initialize the Client-side of CapStore using CapStoreClient.Initialize()
+1. Install the Wally package
+2. Require the module on both sides
+3. Initialize the Server-side and Client-side of CapStore using CapStore.Initialize()
 
 ## Important note
+
 - If you modify Profile or Replica directly, it will not Replicate to client
 - To replicate the data, you should use built-in Replica mutators such as Replica:SetValue()
 - To get player's data, you can use built-in Replica listeners such as Replica:ListenToChange()
@@ -31,10 +32,12 @@ Every mutator and listener is arleady documented at the ReplicaService API
 
 # API
 
-## CapStoreServer Functions
+## Server-side
 
-### CapStoreServer.Initialize(profile_template, store_name, replica_name) 
+### CapStore.Initialize(profile_template, store_name, replica_name)
+
 Parameters:
+
 - profile_template - Profiles will default to given table (hard-copy) when no data was saved previously
 - store_name - DataStore name, by default set to "PlayerProfiles"
 - replica_name - Replicas name, by default set to "ProfilesReplica"
@@ -43,16 +46,20 @@ Initializes the CapStore on the Server-side.
 You should call this function before everything you do in CapStore Server-side.
 Returns nothing.
 
-### CapStoreServer.GetReplica(player) 
+### CapStore.GetReplica(player)
+
 Parameters:
+
 - player - Player to get Replica from
 
 Gets Replica of provided player.
 You can modify the data using built-in mutators of ReplicaService.
 You can skip the `player` parameter and it will return Replica of every player in the current server.
 
-### CapStoreServer.GetProfile(player) 
+### CapStore.GetProfile(player)
+
 Parameters:
+
 - player - Player to get Replica from
 
 Gets Profile of provided player.
@@ -60,37 +67,44 @@ It's not recommended to change the data directly in Profile.
 If you do so, it will not replicate to the player.
 You can skip the `player` parameter and it will return Profile of every player in the current server.
 
-## CapStoreServer Members
+## Server-side Members
 
-### CapStoreServer.ProfileService
+### CapStore.ProfileService
+
 The ProfileService module what CapStore's Server-side module uses.
 
-### CapStoreServer.ProfileStore
+### CapStore.ProfileStore
+
 The ProfileStore what CapStore's Server-side module uses.
 
-### CapStoreServer.ReplicaService
+### CapStore.ReplicaService
+
 The ReplicaService module what CapStore's Server-side module uses.
 
-## CapStoreClient Functions
+## Client-side
 
-### CapStoreClient.Initialize(replica_name) 
+### CapStore.Initialize(replica_name)
+
 Parameters:
+
 - replica_name - Replicas name, by default set to "ProfilesReplica", it should be the same as `replica_name` you defined at the `CapStoreServer.Initialize()`
 
 Initializes the CapStore on the Client-side.
 You should call this function before everything you do in CapStore Client-side.
 Returns nothing.
 
-### CapStoreServer.GetReplica() 
+### CapStore.GetReplica()
 
 Gets Replica of client.
 You can listen for the data changes using built-in listeners of Replica.
 
-## CapStoreClient Members
+## Client-side Members
 
-### CapStoreServer.ReplicaController
+### CapStore.ReplicaController
+
 The ReplicaController module what CapStore's Server-side module uses.
 
-### CapStoreServer.ReplicaCreated
+### CapStore.ReplicaCreated
+
 Event what gets fired when Replica got successfully created.
-It indicates that the Replica became available to use. 
+It indicates that the Replica became available to use.
