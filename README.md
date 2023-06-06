@@ -8,7 +8,7 @@ Made by captivater.
 
 For Wally: Paste this into your `wally.toml` file
 
-```json
+```toml
 capstore = "qaptivator/capstore@0.1.7"
 ```
 
