@@ -12,7 +12,8 @@ For Wally: Paste this into your `wally.toml` file
 capstore = "qaptivator/capstore@0.1.7"
 ```
 
-Model is coming soon.
+You can also install the library using the model:
+https://www.roblox.com/library/13779687697/CapStore
 
 ## Usage
 
