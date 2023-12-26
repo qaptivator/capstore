@@ -4,108 +4,82 @@ Roblox Library to easily setup simple data storing.
 This library uses ProfileService along with ReplicaService.
 Made by captivater.
 
-## Installation
+# Installation
 
-For Wally: Paste this into your `wally.toml` file
+Wally:
 
 ```toml
 capstore = "qaptivator/capstore@0.1.7"
 ```
 
-You can also install the library using the model:
+Roblox studio model:
 https://www.roblox.com/library/13779687697/CapStore
 
-## Usage
+# Usage
 
-1. Install the Wally package
-2. Require the module on both sides
-3. Initialize the Server-side and Client-side of CapStore using CapStore.Initialize()
+1. Install the module
+2. Require the module on server and client side
+3. Initialize both sides of CapStore using CapStore.Initialize()
 
-## Important note
+**WARNING: The default ProfileStore name had been changed, so the data saved on versions before and on 0.1.7 would remain on the old ProfileStore**
 
-- If you modify Profile or Replica directly, it will not Replicate to client
-- To replicate the data, you should use built-in Replica mutators such as Replica:SetValue()
-- To get player's data, you can use built-in Replica listeners such as Replica:ListenToChange()
-- If you wanna get the profile directly, create your own modules or events to handle that
+# Profiles and Replicas
 
-Every mutator and listener is arleady documented at the ReplicaService API
-(https://madstudioroblox.github.io/ReplicaService/api/)
+Profile is the object which holds the player data. It will be saved to DataStores when player leaves the game.
+Replicas are objects, which replicate the profile from server to client side using events.
+Profiles should be used only for reading, because writing something to it will not replicate to the client,
+which will cause issues. Writing to replicas can be done using built-in mutators of ReplicaService.
+
+In this module, you cannot get the player profile from client side,
+only using listeners and on initalization of the replica.
+But you can make is yourself using RemoteFunctions and some server code.
+Listening to the changes can be done using built-in listeners of ReplicaService.
+You can also get the initialized data from the replica.
+Replicas can be used for something like currency counters, because they only need to update on initalization and data changes.
+
+Every mutator and listener is arleady documented and explained at the [ReplicaService API](https://madstudioroblox.github.io/ReplicaService/api/)
 
 # API
 
 ## Server-side
 
-### CapStore.Initialize(profile_template, store_name, replica_name)
+### CapStore.Initialize(profileTemplate)
 
-Parameters:
-
-- profile_template - Profiles will default to given table (hard-copy) when no data was saved previously
-- store_name - DataStore name, by default set to "PlayerProfiles"
-- replica_name - Replicas name, by default set to "ProfilesReplica"
-
-Initializes the CapStore on the Server-side.
-You should call this function before everything you do in CapStore Server-side.
+Initializes the CapStore on the server-side. You should provide a template which
+new profiles will default to when no data was saved previously.
+You should call this function before everything you do in CapStore server-side.
 Returns nothing.
 
 ### CapStore.GetReplica(player)
 
-Parameters:
-
-- player - Player to get Replica from
-
-Gets Replica of provided player.
-You can modify the data using built-in mutators of ReplicaService.
-You can skip the `player` parameter and it will return Replica of every player in the current server.
+Gets replica of provided player. Returns a promise. You can also use UserId instead of Player instance.
+You can modify and sync the player data using built-in replica mutators of ReplicaService.
+You can skip the `player` parameter and it will return the replica of every player in server.
 
 ### CapStore.GetProfile(player)
 
-Parameters:
-
-- player - Player to get Replica from
-
-Gets Profile of provided player.
+Gets profile of provided player. Returns a promise. You can also use UserId instead of Player instance.
 It's not recommended to change the data directly in Profile.
 If you do so, it will not replicate to the player.
-You can skip the `player` parameter and it will return Profile of every player in the current server.
+You can skip the `player` parameter and it will return the profile of every player in server.
 
-## Server-side Members
+### CapStore.Initialized
 
-### CapStore.ProfileService
-
-The ProfileService module what CapStore's Server-side module uses.
-
-### CapStore.ProfileStore
-
-The ProfileStore what CapStore's Server-side module uses.
-
-### CapStore.ReplicaService
-
-The ReplicaService module what CapStore's Server-side module uses.
+Signal which fires when the server-side CapStore was finished initializing.
 
 ## Client-side
 
-### CapStore.Initialize(replica_name)
+### CapStore.Initialize()
 
-Parameters:
-
-- replica_name - Replicas name, by default set to "ProfilesReplica", it should be the same as `replica_name` you defined at the `CapStoreServer.Initialize()`
-
-Initializes the CapStore on the Client-side.
+Initializes the CapStore on the client-side.
 You should call this function before everything you do in CapStore Client-side.
 Returns nothing.
 
 ### CapStore.GetReplica()
 
-Gets Replica of client.
-You can listen for the data changes using built-in listeners of Replica.
-
-## Client-side Members
-
-### CapStore.ReplicaController
-
-The ReplicaController module what CapStore's Server-side module uses.
+Gets the replica of the current player (client). Returns a promise.
+You can listen for the data changes using built-in listeners of ReplicaService.
 
 ### CapStore.ReplicaCreated
 
-Event what gets fired when Replica got successfully created.
-It indicates that the Replica became available to use.
+Signal which fires when the client-side CapStore had received the created replica for profile synchronization.

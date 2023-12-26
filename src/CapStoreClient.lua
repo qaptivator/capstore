@@ -6,16 +6,18 @@ local ReplicaController = require(script.Parent.Parent.replicaservice)
 local Promise = require(script.Parent.Parent.promise)
 local Signal = require(script.Parent.Parent.signal)
 
+local Replica = nil
+
+-- constants
+local ProfileReplicaName = "CapStoreProfileReplica"
+
 local CapStoreClient = {}
 
 CapStoreClient.ReplicaCreated = Signal.new()
-CapStoreClient.ReplicaController = ReplicaController
 
-function CapStoreClient.Initialize(replica_name: string)
-	replica_name = replica_name or "ProfilesReplica"
-
-	ReplicaController.ReplicaOfClassCreated(replica_name, function(replica)
-		CapStoreClient.Replica = replica
+function CapStoreClient.Initialize()
+	ReplicaController.ReplicaOfClassCreated(ProfileReplicaName, function(replica)
+		Replica = replica
 		CapStoreClient.ReplicaCreated:Fire(replica)
 	end)
 
@@ -24,12 +26,10 @@ end
 
 function CapStoreClient.GetReplica()
 	return Promise.new(function(resolve)
-		if CapStoreClient.Replica then
-			resolve(CapStoreClient.Replica)
-		else
+		if not Replica then
 			CapStoreClient.ReplicaCreated:Wait()
-			resolve(CapStoreClient.Replica)
 		end
+		resolve(Replica)
 	end)
 end
 

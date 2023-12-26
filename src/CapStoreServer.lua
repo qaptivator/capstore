@@ -9,10 +9,11 @@ local Signal = require(script.Parent.Parent.signal)
 
 local Players = game:GetService("Players")
 
-local Profiles = nil
-local ProfileStore = nil
-local Replicas = nil
-local ReplicaClassToken = nil
+local Profiles, ProfileReplicas, ProfileStore = {}, {}, nil
+
+-- constants
+local ProfileStoreName = "CapStoreProfiles"
+local ProfileReplicaToken = ReplicaService.NewClassToken("CapStoreProfileReplica")
 
 local CapStoreServer = {}
 
@@ -26,8 +27,8 @@ local function OnPlayerAdded(player)
 		profile:Reconcile()
 
 		profile:ListenToRelease(function()
-			Replicas[player]:Destroy()
-			Replicas[player] = nil
+			ProfileReplicas[player]:Destroy()
+			ProfileReplicas[player] = nil
 
 			Profiles[player] = nil
 			player:Kick()
@@ -39,12 +40,12 @@ local function OnPlayerAdded(player)
 			Profiles[player] = profile
 
 			local replica = ReplicaService.NewReplica({
-				ClassToken = ReplicaClassToken,
+				ClassToken = ProfileReplicaToken,
 				Data = profile.Data,
 				Replication = player,
 			})
 
-			Replicas[player] = replica
+			ProfileReplicas[player] = replica
 		end
 	else
 		player:Kick("Unable to load your data. Please rejoin.")
@@ -59,12 +60,16 @@ local function OnPlayerRemoved(player)
 	end
 end
 
-function CapStoreServer.Initialize(profile_template: { any }, store_name: string, replica_name: string)
-	store_name = store_name or "PlayerProfiles"
-	replica_name = replica_name or "ProfilesReplica"
+local function GetPlayer(player: Player | number): Player
+	if typeof(player) == "number" then
+		return Players:GetPlayerByUserId(player)
+	else
+		return player
+	end
+end
 
-	ProfileStore = ProfileService.GetProfileStore(store_name, profile_template)
-	ReplicaClassToken = ReplicaService.NewClassToken(replica_name)
+function CapStoreServer.Initialize(profileTemplate: { any })
+	ProfileStore = ProfileService.GetProfileStore(ProfileStoreName, profileTemplate)
 
 	for _, player in Players:GetPlayers() do
 		task.spawn(OnPlayerAdded, player)
@@ -82,40 +87,38 @@ function CapStoreServer.Initialize(profile_template: { any }, store_name: string
 	CapStoreServer.Initialized:Fire()
 end
 
-function CapStoreServer.GetReplica(player: Player)
+function CapStoreServer.GetProfile(player: Player | number)
+	local _player = GetPlayer(player)
 	return Promise.new(function(resolve)
-		if not Replicas then
+		if not Profiles then
 			CapStoreServer.Initialized:Wait()
 		end
 
-		if player ~= nil then
-			assert(Replicas[player], string.format("Replica does not exist for %s", tostring(player.UserId)))
+		if _player ~= nil then
+			assert(Profiles[_player], string.format("Profile does not exist for %s", tostring(_player.UserId)))
 
-			resolve(Replicas[player])
-		else
-			resolve(Replicas)
-		end
-	end)
-end
-
-function CapStoreServer.GetProfile(player: Player)
-	return Promise.new(function(resolve)
-		if Profiles == {} then
-			CapStoreServer.Initialized:Wait()
-		end
-
-		if player ~= nil then
-			assert(Profiles[player], string.format("Profile does not exist for %s", tostring(player.UserId)))
-
-			resolve(Profiles[player])
+			resolve(Profiles[_player])
 		else
 			resolve(Profiles)
 		end
-	end)
+	end):catch(warn)
 end
 
-CapStoreServer.ProfileService = ProfileService
-CapStoreServer.ReplicaService = ReplicaService
-CapStoreServer.ProfileStore = ProfileStore
+function CapStoreServer.GetReplica(player: Player | number)
+	local _player: Player = GetPlayer(player)
+	return Promise.new(function(resolve)
+		if not ProfileReplicas then
+			CapStoreServer.Initialized:Wait()
+		end
+
+		if _player ~= nil then
+			assert(ProfileReplicas[_player], string.format("Replica does not exist for %s", tostring(_player.UserId)))
+
+			resolve(ProfileReplicas[_player])
+		else
+			resolve(ProfileReplicas)
+		end
+	end):catch(warn)
+end
 
 return CapStoreServer
