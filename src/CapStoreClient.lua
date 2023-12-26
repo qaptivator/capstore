@@ -10,6 +10,7 @@ local Replica = nil
 
 -- constants
 local ProfileReplicaName = "CapStoreProfileReplica"
+--local LeaderstatsReplicaName = "CapStoreLeaderstatsReplica"
 
 local CapStoreClient = {}
 

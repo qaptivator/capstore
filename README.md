@@ -5,20 +5,30 @@ This library uses ProfileService along with ReplicaService.
 Made by captivater.
 
 <p>
-  <a href="https://wally.run/package/qaptivator/capstore?version=0.1.7">
-    <img alt="Wally" src="https://img.shields.io/badge/Wally-0.1.7-AD4646" />
+  <a href="https://wally.run/package/qaptivator/capstore?version=0.1.8">
+    <img alt="Wally" src="https://img.shields.io/badge/Wally-0.1.8-AD4646" />
   </a>
   <a href="https://www.roblox.com/library/13779687697/CapStore">
     <img alt="Roblox" src="https://img.shields.io/badge/Roblox-CapStore-blue" />
   </a>
 </p>
 
+# Features
+
+Here are the main features of CapStore, which show why should you use this library.
+
+- Really easy setup
+- Datastore handling using ProfileService
+- Server-to-client profile replication using ReplicaService
+- Support for global updates from ProfileService
+- Leaderstats for data display (COMING SOON)
+
 # Installation
 
 Wally:
 
 ```toml
-capstore = "qaptivator/capstore@0.1.7"
+capstore = "qaptivator/capstore@0.1.8"
 ```
 
 Roblox studio model:
@@ -52,29 +62,38 @@ Every mutator and listener is arleady documented and explained at the [ReplicaSe
 
 ## Server-side
 
-### CapStore.Initialize(profileTemplate)
+### CapStore.Initialize(profileTemplate: { any })
 
 Initializes the CapStore on the server-side. You should provide a template which
 new profiles will default to when no data was saved previously.
 You should call this function before everything you do in CapStore server-side.
 Returns nothing.
 
-### CapStore.GetReplica(player)
+### CapStore.GetReplica(player: Player | number)
 
 Gets replica of provided player. Returns a promise. You can also use UserId instead of Player instance.
 You can modify and sync the player data using built-in replica mutators of ReplicaService.
 You can skip the `player` parameter and it will return the replica of every player in server.
 
-### CapStore.GetProfile(player)
+### CapStore.GetProfile(player: Player | number)
 
 Gets profile of provided player. Returns a promise. You can also use UserId instead of Player instance.
 It's not recommended to change the data directly in Profile.
 If you do so, it will not replicate to the player.
 You can skip the `player` parameter and it will return the profile of every player in server.
 
+### CapStore.CreateGlobalUpdates(player: Player | number, callback: (any) -> ())
+
+Wrapper function for `ProfileStore:GlobalUpdateProfileAsync()`. You can also use UserId instead of Player instance.
+Read more about ProfileService's global updates on their [API](https://madstudioroblox.github.io/ProfileService/api/#global-updates).
+
 ### CapStore.Initialized
 
 Signal which fires when the server-side CapStore was finished initializing.
+
+### CapStore.HandleLockedUpdate
+
+Signal which fires when the there is a new locked update received. As arguments, it gives the update data, player's profile and the player. Read more about ProfileService's locked updates on their [API](https://madstudioroblox.github.io/ProfileService/api/#global-updates).
 
 ## Client-side
 

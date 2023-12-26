@@ -14,10 +14,17 @@ local Profiles, ProfileReplicas, ProfileStore = {}, {}, nil
 -- constants
 local ProfileStoreName = "CapStoreProfiles"
 local ProfileReplicaToken = ReplicaService.NewClassToken("CapStoreProfileReplica")
+--local LeaderstatsReplicaToken = ReplicaService.NewClassToken("CapStoreLeaderstatsReplica")
 
 local CapStoreServer = {}
 
 CapStoreServer.Initialized = Signal.new()
+CapStoreServer.HandleLockedUpdate = Signal.new()
+
+local function HandleLockedUpdate(globalUpdates, update, profile, player)
+	CapStoreServer.HandleLockedUpdate:Fire(update[2], profile, player)
+	globalUpdates:ClearLockedUpdate(update[1])
+end
 
 local function OnPlayerAdded(player)
 	local profile = ProfileStore:LoadProfileAsync("Player_" .. player.UserId)
@@ -34,10 +41,26 @@ local function OnPlayerAdded(player)
 			player:Kick()
 		end)
 
-		if not player:IsDescendantOf(Players) then
-			profile:Release()
-		else
+		if player:IsDescendantOf(Players) then
 			Profiles[player] = profile
+
+			local globalUpdates = profile.GlobalUpdates
+
+			for _, update in globalUpdates:GetActiveUpdates() do
+				globalUpdates:LockActiveUpdate(update[1])
+			end
+
+			for _, update in globalUpdates:GetLockedUpdates() do
+				HandleLockedUpdate(globalUpdates, update, profile, player)
+			end
+
+			globalUpdates:ListenToNewActiveUpdate(function(id, data)
+				globalUpdates:LockActiveUpdate(id)
+			end)
+
+			globalUpdates:ListenToNewLockedUpdate(function(id, data)
+				HandleLockedUpdate(globalUpdates, { id, data }, profile, player)
+			end)
 
 			local replica = ReplicaService.NewReplica({
 				ClassToken = ProfileReplicaToken,
@@ -46,6 +69,8 @@ local function OnPlayerAdded(player)
 			})
 
 			ProfileReplicas[player] = replica
+		else
+			profile:Release()
 		end
 	else
 		player:Kick("Unable to load your data. Please rejoin.")
@@ -119,6 +144,25 @@ function CapStoreServer.GetReplica(player: Player | number)
 			resolve(ProfileReplicas)
 		end
 	end):catch(warn)
+end
+
+--[[function CapStoreServer.InitializeLeaderstats(dataCallback: (any) -> any)
+	local data = {}
+	for _, player in Players:GetPlayers() do
+		CapStoreServer.GetProfile(player):andThen(function(profile)
+			data[player] = dataCallback(profile)
+		end)
+	end
+
+	ReplicaService.NewReplica({
+		ClassToken = LeaderstatsReplicaToken,
+		Data = data,
+		Replication = "All",
+	})
+end]]
+
+function CapStoreServer.CreateGlobalUpdates(player: Player | number, callback: (any) -> ())
+	ProfileStore:GlobalUpdateProfileAsync(`Player_{GetPlayer(player).UserId}`, callback)
 end
 
 return CapStoreServer
