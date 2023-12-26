@@ -4,7 +4,7 @@ Roblox Library to easily setup simple data storing.
 This library uses ProfileService along with ReplicaService.
 Made by captivater.
 
-<p align="center">
+<p>
   <a href="https://wally.run/package/qaptivator/capstore?version=0.1.7">
     <img alt="Wally" src="https://img.shields.io/badge/Wally-0.1.7-AD4646" />
   </a>
